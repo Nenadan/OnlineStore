@@ -1,4 +1,4 @@
-﻿namespace OnlineStore.Models.BaseModel
+﻿namespace OnlineStore.Models.BaseModels
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class CosmosAttribute : Attribute

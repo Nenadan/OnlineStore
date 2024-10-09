@@ -2,7 +2,7 @@
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using OnlineStore.Models;
-using OnlineStore.Models.BaseModel;
+using OnlineStore.Models.BaseModels;
 
 namespace OnlineStore.Controllers.CartController;
 
@@ -27,15 +27,25 @@ public class CartController : ControllerBase
         await client.CreateDatabaseIfNotExistsAsync("OnlineStore");
         var database = client.GetDatabase("OnlineStore");
 
-        Container financial = await database.CreateContainerIfNotExistsAsync("Financial", "/DocType");
+       await database.CreateContainerIfNotExistsAsync("Financial", "/DocType");
+
+        Container container = database.GetContainer("Financial");
 
         Type type = typeof(CartModel);
         var attribute = (CosmosAttribute) Attribute.GetCustomAttribute(type, typeof(CosmosAttribute));
-       
-        
 
-        //financial.CreateItemAsync
+        if(attribute != null)
+        {
+            var item = new CartModel()
+            {
+                Amount = 10,
+                DocType = attribute.DocType,
+                Id = Guid.NewGuid(),
+            };
 
-        return attribute.DocType;
+            await container.CreateItemAsync<CartModel>(item, partitionKey: new PartitionKey(attribute.DocType));
+        }
+
+        return attribute.DocType ?? "N/A";
     }
 }

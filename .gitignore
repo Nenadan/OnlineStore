@@ -5,3 +5,5 @@
 /OnlineStore/.vs/OnlineStore
 OnlineStore/obj/Debug/net8.0/OnlineStore.AssemblyInfo.cs
 OnlineStore/obj/Debug/net8.0/OnlineStore.AssemblyInfoInputs.cache
+OnlineStore/obj
+OnlineStore/bin
