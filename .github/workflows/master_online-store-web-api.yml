@@ -21,9 +21,6 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Restore dependencies
-        run: dotnet restore OnlineStore/OnlineStore.sln
-
       - name: Build with dotnet
         run: dotnet build OnlineStore/OnlineStore.sln --configuration Release
 
