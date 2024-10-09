@@ -24,7 +24,7 @@ public class CartController : ControllerBase
         var connectionString = _configuration.GetConnectionString("COSMOS_DB");
         CosmosClient client = new CosmosClient(connectionString);
 
-        client.CreateDatabaseIfNotExistsAsync("OnlineStore");
+        await client.CreateDatabaseIfNotExistsAsync("OnlineStore");
         var database = client.GetDatabase("OnlineStore");
 
         Container financial = await database.CreateContainerIfNotExistsAsync("Financial", "/DocType");
