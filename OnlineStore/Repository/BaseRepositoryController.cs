@@ -24,6 +24,7 @@ namespace OnlineStore.Repository
         public async Task<List<Titem>> GetAll()
         {
             var query = Container.GetItemLinqQueryable<Titem>().ToFeedIterator();
+            
             List<Titem> results = new();
 
             while(query.HasMoreResults)
