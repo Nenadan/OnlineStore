@@ -1,8 +1,8 @@
-﻿using OnlineStore.Models.BaseModel;
+﻿using OnlineStore.Models.BaseModels;
 
 namespace OnlineStore.Models
 {
-    [Cosmos("Cart")]
+    [CosmosAttribute("Cart", "Financial")]
     public class CartModel : BaseApiModel<Guid>
     {
         public int Amount { get; set; }

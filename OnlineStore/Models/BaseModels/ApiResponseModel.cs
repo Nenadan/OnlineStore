@@ -4,10 +4,10 @@ namespace OnlineStore.Models.BaseModels
 {
     public class ApiResponseModel
     {
-        public object? ResponseContent;
+        public object? ResponseContent { get; set; }
 
-        public HttpStatusCode StatuseCode;
+        public HttpStatusCode StatuseCode { get; set; }
 
-        public bool IsSuccessfull;
+        public bool IsSuccessfull { get; set; }
     }
 }

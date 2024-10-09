@@ -3,16 +3,17 @@ using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using OnlineStore.Models;
 using OnlineStore.Models.BaseModels;
+using OnlineStore.Repository;
 
 namespace OnlineStore.Controllers.CartController;
 
 [ApiController]
 [Route("cart")]
-public class CartController : ControllerBase
+public class CartController : BaseRepositoryController<CartModel>
 {
     private readonly IConfiguration _configuration;
 
-    public CartController(IConfiguration configuration)
+    public CartController(IConfiguration configuration) : base(configuration)
     {
         _configuration = configuration;
     }
