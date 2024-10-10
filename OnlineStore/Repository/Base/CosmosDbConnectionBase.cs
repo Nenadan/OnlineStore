@@ -25,6 +25,11 @@ namespace OnlineStore.Repository.Base
 
             _cosmosClient = new CosmosClient(_connectionString);
 
+            _cosmosClient.CreateDatabaseIfNotExistsAsync("OnlineStore", 400);
+
+            var database = _cosmosClient.GetDatabase("OnlineStore");
+            database.CreateContainerIfNotExistsAsync("OnlineStore", "/DocType");
+
             Type type = typeof(TItem);
             CosmosAttribute attribute = (CosmosAttribute)Attribute.GetCustomAttribute(type, typeof(CosmosAttribute));
             DocType = attribute.DocType;
