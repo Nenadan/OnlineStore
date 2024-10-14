@@ -22,10 +22,10 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Build with dotnet
-        run: dotnet build OnlineStore/OnlineStore/OnlineStore.csproj --configuration Release
+        run: dotnet build OnlineStore/OnlineStore.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish OnlineStore/OnlineStore/OnlineStore.csproj -c Release -o "C:\Program Files\dotnet/myapp"
+        run: dotnet publish OnlineStore/OnlineStore.csproj -c Release -o "C:\Program Files\dotnet/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
