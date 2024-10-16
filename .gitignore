@@ -7,6 +7,10 @@ OnlineStore/obj/Debug/net8.0/OnlineStore.AssemblyInfo.cs
 OnlineStore/obj/Debug/net8.0/OnlineStore.AssemblyInfoInputs.cache
 OnlineStore/obj/
 OnlineStore/bin/
+**/obj/
+**/bin/
+**/v17/
+**/FileContentIndex/
 OnlineStore/Backend/OnlineStore/obj/
 OnlineStore/Backend/OnlineStore/bin/
 .vs/OnlineStore/v17/.futdcache.v2
