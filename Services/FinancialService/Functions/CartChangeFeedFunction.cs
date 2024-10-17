@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Azure.Messaging.ServiceBus;
 using FinancialService.Model;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
@@ -13,12 +14,18 @@ namespace FinancialService.Functions
     public sealed class CartChangeFeedFunction
     {
         private readonly IConfiguration _configuration;
-        private readonly string _connectionString;
+        private readonly string _queueName;
+        private readonly string _namespaceName;
+        private readonly ServiceBusClient _serviceBusClient;
+        private readonly ServiceBusSender _sender;
 
         public CartChangeFeedFunction(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connectionString = _configuration.GetConnectionString("COSMOS_DB");
+            _namespaceName = _configuration.GetValue<string>("NameSpace");
+            _queueName = _configuration.GetValue<string>("QueueName");
+            //_serviceBusClient = new ServiceBusClient(_namespaceName);
+            //_sender = _serviceBusClient.CreateSender(_queueName);
         }
 
         [FunctionName(nameof(ChangeFeedProcessorForFinancialContainer))]
@@ -32,12 +39,6 @@ namespace FinancialService.Functions
         {
             if (input != null && input.Count > 0)
             {
-                var json = JsonSerializer.Serialize(input[0]);
-                var response = JsonSerializer.Deserialize<CartModel>(json);
-                if(response != null)
-                {
-                    log.LogInformation($"Item has been updated with Id: {response.id} and Amount: {response.Amount}.");
-                }
                 log.LogInformation("Documents modified " + input.Count);
                 log.LogInformation("First document Id " + input[0].id);
             }
