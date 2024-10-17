@@ -36,7 +36,7 @@ namespace FinancialService.Functions
                 var response = JsonSerializer.Deserialize<CartModel>(json);
                 if(response != null)
                 {
-                    log.LogInformation($"Item has been updated with Id: {response.Id} and Amount: {response.Amount}.");
+                    log.LogInformation($"Item has been updated with Id: {response.id} and Amount: {response.Amount}.");
                 }
                 log.LogInformation("Documents modified " + input.Count);
                 log.LogInformation("First document Id " + input[0].id);
