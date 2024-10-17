@@ -1,15 +1,28 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
+using System.Threading.Tasks;
+using FinancialService.Model;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace FinancialService.Functions
 {
-    public static class CartChangeFeedFunction
+    public sealed class CartChangeFeedFunction
     {
-        [FunctionName("CartChangeFeedFunction")]
-        public static void Run([CosmosDBTrigger(
+        private readonly IConfiguration _configuration;
+        private readonly string _connectionString;
+
+        public CartChangeFeedFunction(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            _connectionString = _configuration.GetConnectionString("COSMOS_DB");
+        }
+
+        [FunctionName(nameof(ChangeFeedProcessorForFinancialContainer))]
+        public static void ChangeFeedProcessorForFinancialContainer([CosmosDBTrigger(
             databaseName: "OnlineStore",
             containerName: "Financial",
             Connection = "COSMOS_DB",
@@ -19,6 +32,12 @@ namespace FinancialService.Functions
         {
             if (input != null && input.Count > 0)
             {
+                var json = JsonSerializer.Serialize(input[0]);
+                var response = JsonSerializer.Deserialize<CartModel>(json);
+                if(response != null)
+                {
+                    log.LogInformation($"Item has been updated with Id: {response.Id} and Amount: {response.Amount}.");
+                }
                 log.LogInformation("Documents modified " + input.Count);
                 log.LogInformation("First document Id " + input[0].id);
             }
