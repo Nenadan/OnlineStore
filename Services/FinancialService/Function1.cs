@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace FinancialService
 {
     public static class Function1
-    {
+    {/*
         [FunctionName("Function1")]
         public static void Run([CosmosDBTrigger(
             databaseName: "OnlineStore",
@@ -22,9 +22,9 @@ namespace FinancialService
                 log.LogInformation("Documents modified " + input.Count);
                 log.LogInformation("First document Id " + input[0].id);
             }
-        }
+        } */
     }
-
+       
     // Customize the model with your own desired properties
     public class ToDoItem
     {

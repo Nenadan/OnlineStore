@@ -11,10 +11,11 @@ using Microsoft.Extensions.Logging;
 
 namespace FinancialService.Functions
 {
-    public sealed class CartChangeFeedFunction
+    public class CartChangeFeedFunction
     {
+        
         private readonly IConfiguration _configuration;
-        private readonly string _queueName;
+        private readonly string _topicName;
         private readonly string _namespaceName;
         private readonly ServiceBusClient _serviceBusClient;
         private readonly ServiceBusSender _sender;
@@ -23,13 +24,13 @@ namespace FinancialService.Functions
         {
             _configuration = configuration;
             _namespaceName = _configuration.GetValue<string>("NameSpace");
-            _queueName = _configuration.GetValue<string>("QueueName");
-            //_serviceBusClient = new ServiceBusClient(_namespaceName);
-            //_sender = _serviceBusClient.CreateSender(_queueName);
+            _topicName = _configuration.GetValue<string>("TopicName");
+            _serviceBusClient = new ServiceBusClient(_namespaceName);
+            _sender = _serviceBusClient.CreateSender(_topicName);
         }
-
-        [FunctionName(nameof(ChangeFeedProcessorForFinancialContainer))]
-        public static void ChangeFeedProcessorForFinancialContainer([CosmosDBTrigger(
+        
+        [FunctionName("CartUpdatesChangeFeedProcessor")]
+        public async Task Run([CosmosDBTrigger(
             databaseName: "OnlineStore",
             containerName: "Financial",
             Connection = "COSMOS_DB",
@@ -41,6 +42,18 @@ namespace FinancialService.Functions
             {
                 log.LogInformation("Documents modified " + input.Count);
                 log.LogInformation("First document Id " + input[0].id);
+
+                CartUpdate cartUpdates = new()
+                {
+                    id = Guid.NewGuid(),
+                    OriginalId = input[0].id,
+                    Description = input[0].Description,
+                };
+
+                var messageBody = JsonSerializer.Serialize(cartUpdates);
+
+                ServiceBusMessage message = new ServiceBusMessage(messageBody);
+                await _sender.SendMessageAsync(message);
             }
         }
     }
@@ -49,6 +62,13 @@ namespace FinancialService.Functions
     public class ToDoItem
     {
         public string id { get; set; }
+        public string Description { get; set; }
+    }
+
+    public class CartUpdate
+    {
+        public Guid id { get; set; }
+        public string OriginalId { get; set; }
         public string Description { get; set; }
     }
 }
